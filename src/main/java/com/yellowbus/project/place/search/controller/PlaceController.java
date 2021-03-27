@@ -2,6 +2,7 @@ package com.yellowbus.project.place.search.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yellowbus.project.place.search.entity.Member;
 import com.yellowbus.project.place.search.entity.SearchResult;
 import com.yellowbus.project.place.search.entity.UserInfo;
 import com.yellowbus.project.place.search.service.PlaceService;
@@ -37,7 +38,7 @@ public class PlaceController {
     @GetMapping("/v1/place/{searchWord}")
     public ResponseEntity<HashMap<String, Object>> v1Place(@PathVariable String searchWord, Authentication authentication) throws Exception {
 
-        UserInfo userInfo = (UserInfo)authentication.getPrincipal();
+        Member userInfo = (Member)authentication.getPrincipal();
 
         logger.debug(" ========= place ========= ");
         logger.debug("  "+userInfo.getUsername());
@@ -75,9 +76,8 @@ public class PlaceController {
 
 
     @GetMapping("/v1/search/history")
-    public ResponseEntity<HashMap<String, Object>> history() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserInfo userInfo = (UserInfo)auth.getPrincipal();
+    public ResponseEntity<HashMap<String, Object>> history(Authentication authentication) {
+        Member userInfo = (Member)authentication.getPrincipal();
 
         HashMap<String, Object> searchHistory = placeService.getSearchHistory(userInfo);
 

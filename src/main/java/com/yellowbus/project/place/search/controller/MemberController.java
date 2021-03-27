@@ -41,15 +41,6 @@ public class MemberController {
         return ResponseEntity.ok(map);
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<HashMap<String, Object>> signin(@RequestParam HashMap<String, Object> hashMap) {
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("message", "You have successfully signed up");
-
-        return ResponseEntity.ok(map);
-    }
-
     @PostMapping("/login/success")
     public ResponseEntity<HashMap<String, Object>> loginSuccess() {
         HashMap<String, Object> map = new HashMap<>();

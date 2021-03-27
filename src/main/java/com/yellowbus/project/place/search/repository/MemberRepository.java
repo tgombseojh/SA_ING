@@ -1,6 +1,7 @@
 package com.yellowbus.project.place.search.repository;
 
 import com.yellowbus.project.place.search.entity.Member;
+import com.yellowbus.project.place.search.entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

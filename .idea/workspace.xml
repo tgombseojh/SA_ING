@@ -4,16 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c252067-5305-4b35-a1b3-7e5edff8576c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+    <list default="true" id="3c252067-5305-4b35-a1b3-7e5edff8576c" name="Default Changelist" comment="mod Authentication">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/MemberController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/PlaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/PlaceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/yellowbus/project/place/search/AbstractControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/yellowbus/project/place/search/AbstractControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/yellowbus/project/place/search/SearchApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/entity/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/handler/LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/handler/LoginSuccessHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/repository/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/repository/MemberRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/MemberService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/PlaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/PlaceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/yellowbus/project/place/search/AbstractControllerTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,11 +74,14 @@
       <recent name="" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
-      <recent name="com.yellowbus.project.place.search.controller" />
       <recent name="com.yellowbus.project.place.search" />
+      <recent name="com.yellowbus.project.place.search.controller" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.yellowbus.project.place.search.config" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.SearchApplication">
+  <component name="RunManager" selected="Gradle.SearchApplicationTest">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -89,33 +93,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MemberControllerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="SearchApplicationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests &quot;com.yellowbus.project.place.search.controller.MemberControllerTest&quot;" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="PlaceControllerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests &quot;com.yellowbus.project.place.search.controller.PlaceControllerTest&quot;" />
+        <option name="scriptParameters" value="--tests &quot;com.yellowbus.project.place.search.SearchApplicationTest&quot;" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -162,14 +145,12 @@
     </configuration>
     <list>
       <item itemvalue="Docker.redis" />
-      <item itemvalue="Gradle.PlaceControllerTest" />
+      <item itemvalue="Gradle.SearchApplicationTest" />
       <item itemvalue="Spring Boot.SearchApplication" />
-      <item itemvalue="Gradle.MemberControllerTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.PlaceControllerTest" />
-        <item itemvalue="Gradle.MemberControllerTest" />
+        <item itemvalue="Gradle.SearchApplicationTest" />
         <item itemvalue="Docker.redis" />
         <item itemvalue="Gradle.SearchApplicationTests" />
       </list>
@@ -183,8 +164,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1616739186885</updated>
-      <workItem from="1616739189499" duration="14485000" />
+      <workItem from="1616739189499" duration="29442000" />
     </task>
+    <task id="LOCAL-00001" summary="mod Authentication">
+      <created>1616820897693</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1616820897693</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,5 +183,7 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
+    <MESSAGE value="mod Authentication" />
+    <option name="LAST_COMMIT_MESSAGE" value="mod Authentication" />
   </component>
 </project>

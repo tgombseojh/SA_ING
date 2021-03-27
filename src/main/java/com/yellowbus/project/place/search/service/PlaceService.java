@@ -3,10 +3,7 @@ package com.yellowbus.project.place.search.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.yellowbus.project.place.search.entity.HotKeyWord;
-import com.yellowbus.project.place.search.entity.SearchHistory;
-import com.yellowbus.project.place.search.entity.SearchResult;
-import com.yellowbus.project.place.search.entity.UserInfo;
+import com.yellowbus.project.place.search.entity.*;
 import com.yellowbus.project.place.search.exception.ApiException;
 import com.yellowbus.project.place.search.repository.HotKeyWordRepository;
 import com.yellowbus.project.place.search.repository.SearchHistoryRepository;
@@ -41,7 +38,7 @@ public class PlaceService {
     final String naverClientSecret = "5GSV4Q3Rk8";
 
     @Async
-    public void saveSearchHistory(String searchWord, UserInfo userInfo) {
+    public void saveSearchHistory(String searchWord, Member userInfo) {
         SearchHistory searchHistory = new SearchHistory();
         searchHistory.setUserId(userInfo.getUserId());
         searchHistory.setUserName(userInfo.getUsername());
@@ -191,7 +188,7 @@ public class PlaceService {
         return finalMap;
     }
 
-    public HashMap<String, Object> getSearchHistory(UserInfo userInfo) {
+    public HashMap<String, Object> getSearchHistory(Member userInfo) {
         List<SearchHistory> searchHistoryList = searchHistoryRepository.findTop20ByUserIdOrderByDateDesc(userInfo.getUserId());
 
         String pattern = "yyyy-MM-dd hh:mm:ss";
