@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Type;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -34,10 +35,9 @@ public class PlaceController {
     private static final Logger logger = LogManager.getLogger(PlaceController.class);
 
     @GetMapping("/v1/place/{searchWord}")
-    public ResponseEntity<HashMap<String, Object>> v1Place(@PathVariable String searchWord) throws Exception {
+    public ResponseEntity<HashMap<String, Object>> v1Place(@PathVariable String searchWord, Authentication authentication) throws Exception {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserInfo userInfo = (UserInfo)auth.getPrincipal();
+        UserInfo userInfo = (UserInfo)authentication.getPrincipal();
 
         logger.debug(" ========= place ========= ");
         logger.debug("  "+userInfo.getUsername());

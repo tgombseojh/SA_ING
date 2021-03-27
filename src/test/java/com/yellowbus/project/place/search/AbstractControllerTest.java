@@ -15,6 +15,8 @@ public abstract class AbstractControllerTest {
 
     protected MockMvc mockMvc;
 
+    /*abstract protected PlaceController placeController();
+    abstract protected MemberController memberController();*/
     abstract protected Object controller();
 
     @BeforeEach
