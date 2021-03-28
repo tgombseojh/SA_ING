@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c252067-5305-4b35-a1b3-7e5edff8576c" name="Default Changelist" comment="mod Authentication">
+    <list default="true" id="3c252067-5305-4b35-a1b3-7e5edff8576c" name="Default Changelist" comment="add junit5 test">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/PlaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/PlaceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/entity/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/handler/LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/handler/LoginSuccessHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/repository/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/repository/MemberRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/PlaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/service/PlaceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/yellowbus/project/place/search/AbstractControllerTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,13 +74,15 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.SearchApplicationTest">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -152,7 +146,6 @@
       <list>
         <item itemvalue="Gradle.SearchApplicationTest" />
         <item itemvalue="Docker.redis" />
-        <item itemvalue="Gradle.SearchApplicationTests" />
       </list>
     </recent_temporary>
   </component>
@@ -164,7 +157,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1616739186885</updated>
-      <workItem from="1616739189499" duration="29442000" />
+      <workItem from="1616739189499" duration="29536000" />
+      <workItem from="1616917576171" duration="1176000" />
     </task>
     <task id="LOCAL-00001" summary="mod Authentication">
       <created>1616820897693</created>
@@ -173,7 +167,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616820897693</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add junit5 test">
+      <created>1616849383424</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1616849383424</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,6 +185,7 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <MESSAGE value="mod Authentication" />
-    <option name="LAST_COMMIT_MESSAGE" value="mod Authentication" />
+    <MESSAGE value="add junit5 test" />
+    <option name="LAST_COMMIT_MESSAGE" value="add junit5 test" />
   </component>
 </project>
