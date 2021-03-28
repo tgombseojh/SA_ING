@@ -36,4 +36,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(SignupException.class)
+    public ResponseEntity<ExceptionInfo> apiException(SignupException e) { // 오픈 API 에러 감지에 사용
+        ExceptionInfo message = new ExceptionInfo("SE05", "User exist (다른 아이디를 사용해주세요)");
+        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

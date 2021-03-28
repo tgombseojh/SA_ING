@@ -56,6 +56,14 @@ class SearchApplicationTest {
                                 .param("name", member.getName())
                                 .param("password", member.getPassword())
                 ).andExpect(status().isOk());
+
+        // 이미 존재하는 아이디 입력
+        mockMvc.perform(
+                        post("/signup")
+                                .param("email", member.getEmail())
+                                .param("name", member.getName())
+                                .param("password", member.getPassword())
+                ).andExpect(status().is(500));
     }
 
     @Test

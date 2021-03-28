@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c252067-5305-4b35-a1b3-7e5edff8576c" name="Default Changelist" comment="add junit5 test">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="3c252067-5305-4b35-a1b3-7e5edff8576c" name="Default Changelist" comment="del UserInfo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/controller/MemberController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yellowbus/project/place/search/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/yellowbus/project/place/search/SearchApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/yellowbus/project/place/search/SearchApplicationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +72,7 @@
       <recent name="com.yellowbus.project.place.search.controller" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.yellowbus.project.place.search.exception" />
       <recent name="com.yellowbus.project.place.search.config" />
     </key>
   </component>
@@ -158,7 +161,7 @@
       <option name="presentableId" value="Default" />
       <updated>1616739186885</updated>
       <workItem from="1616739189499" duration="29536000" />
-      <workItem from="1616917576171" duration="1176000" />
+      <workItem from="1616917576171" duration="1984000" />
     </task>
     <task id="LOCAL-00001" summary="mod Authentication">
       <created>1616820897693</created>
@@ -174,11 +177,43 @@
       <option name="project" value="LOCAL" />
       <updated>1616849383424</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add test case">
+      <created>1616918770027</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1616918770027</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add test case">
+      <created>1616918798817</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1616918798817</updated>
+    </task>
+    <task id="LOCAL-00005" summary="del UserInfo">
+      <created>1616918954111</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1616918954111</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -186,6 +221,8 @@
     </ignored-roots>
     <MESSAGE value="mod Authentication" />
     <MESSAGE value="add junit5 test" />
-    <option name="LAST_COMMIT_MESSAGE" value="add junit5 test" />
+    <MESSAGE value="add test case" />
+    <MESSAGE value="del UserInfo" />
+    <option name="LAST_COMMIT_MESSAGE" value="del UserInfo" />
   </component>
 </project>
