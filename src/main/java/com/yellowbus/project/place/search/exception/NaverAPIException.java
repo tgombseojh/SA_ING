@@ -3,10 +3,8 @@ package com.yellowbus.project.place.search.exception;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.concurrent.ExecutionException;
-
 @Setter @Getter
-public class NaverAPIException extends ExecutionException {
+public class NaverAPIException extends RuntimeException {
 
     String message;
 
