@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.yellowbus.project.place.search.entity.Member;
 import com.yellowbus.project.place.search.entity.SearchResult;
 import com.yellowbus.project.place.search.exception.KakaoAPIException;
+import com.yellowbus.project.place.search.exception.NaverAPIException;
 import com.yellowbus.project.place.search.service.PlaceService;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -58,11 +59,16 @@ public class PlaceController {
             try {
                 task1.join();
             } catch (Exception e) {
-                throw new KakaoAPIException(" from controller ");
+                throw new KakaoAPIException(e.getMessage());
             }
 
             // Async Job4
             CompletableFuture<List<String>> task2 = placeService.naverPlaceAPI(searchWord);
+            try {
+                task2.join();
+            } catch (Exception e) {
+                throw new NaverAPIException(e.getMessage());
+            }
 
             // Async Job3 & 4 가 완료되면 정렬 및 합치기
             kakaoNaverPlace = task1.thenCombine(task2, (kakao, naver) -> placeService.combineKakaoAndNaver(kakao, naver)).get();

@@ -86,13 +86,6 @@ public class PlaceService {
 
         JsonObject jo = gson.fromJson(responseEntity.getBody(), JsonObject.class);
 
-        int a = 1;
-        if (a==2) {
-
-        } else {
-            throw new Exception("Something bad happened.");
-        }
-
         JsonArray jsonElements = jo.getAsJsonArray("documents");
         List<String> kakaoPlaceList = new ArrayList<>();
         for (int i=0; i<jsonElements.size(); i++) {

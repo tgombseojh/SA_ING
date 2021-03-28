@@ -2,6 +2,7 @@ package com.yellowbus.project.place.search;
 
 import com.yellowbus.project.place.search.entity.Member;
 import com.yellowbus.project.place.search.repository.MemberRepository;
+import com.yellowbus.project.place.search.repository.SearchResultRepository;
 import com.yellowbus.project.place.search.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class SearchApplicationTest {
     MemberService memberService;
 
     @Autowired
+    SearchResultRepository searchResultRepository;
+
+    @Autowired
     WebApplicationContext ctx;
 
     Member member;
@@ -46,6 +50,8 @@ class SearchApplicationTest {
         member.setEmail("tiger@gmail.com");
         member.setPassword("tiger");
         member.setName("seojh");
+
+        //searchResultRepository.deleteAll();
     }
 
     @Test
@@ -71,7 +77,7 @@ class SearchApplicationTest {
         // todo 키워드 30개를 랜덤으로 100번 정도 검색
         // todo Async 에러를 테스트
         mockMvc.perform(
-                get("/v1/place/{searchword}", "판교치즈")
+                get("/v1/place/{searchword}", "판교떡볶이")
                         .characterEncoding("UTF-8")
                         .with( user(member) )
         ).andExpect(status().isOk());
