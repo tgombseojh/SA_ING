@@ -66,8 +66,13 @@ public class PlaceService {
         hotKeyWordRepository.save(hotKeyWord);
     }
 
+    public HttpEntity<String> getHttpEntity(HttpHeaders httpHeaders) {
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+        return  entity;
+    }
+
     @Async
-    public CompletableFuture<List<String>> kakaoPlaceAPI(String searchWord) throws Exception {
+    public CompletableFuture<List<String>> kakaoPlaceAPI(String searchWord) {
         String uri = kakaoUri+"?page=1&size=10&sort=accuracy&query="+searchWord;
 
         RestTemplate restTemplate = new RestTemplate();
@@ -76,9 +81,7 @@ public class PlaceService {
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         httpHeaders.set("Authorization", kakaoApiKey);
 
-        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, getHttpEntity(httpHeaders), String.class);
 
         Gson gson = new Gson();
 
@@ -105,9 +108,7 @@ public class PlaceService {
         httpHeaders.set("X-Naver-Client-Id", naverClientId);
         httpHeaders.set("X-Naver-Client-Secret", naverClientSecret);
 
-        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, getHttpEntity(httpHeaders), String.class);
 
         Gson gson = new Gson();
         JsonObject jo = gson.fromJson(responseEntity.getBody(), JsonObject.class);
