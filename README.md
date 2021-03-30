@@ -223,7 +223,7 @@ Container Orchestration 도구를 이용한 확장)
 대용량 트래픽으로 인한 서비스 확장은 어느 한 부분만 확장해서 될 일이 아니라고 생각한다. 
 그래서 전체 서비스를 확장하는 서버 구조도를 작성해 보았다. 
 ```
-![서비스 확장](https://user-images.githubusercontent.com/6174462/112433639-e1006b80-8d85-11eb-8468-0e5d1f9a3930.jpg)
+![서비스 확장](https://user-images.githubusercontent.com/6174462/112914166-3ea20880-9136-11eb-9f5a-274800f7c8b9.jpg)
 ```
 아직 구축 경험은 없지만 관련 사례들을 조사해보니 중앙집중 성격의 DB를 제외 하고는 Kubernetes, Docker Swarm 
 과 같은 Container Orchestration 도구를 이용해 거의 무한 확장이 가능하다고 한다. 
