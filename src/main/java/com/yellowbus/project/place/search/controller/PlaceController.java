@@ -21,6 +21,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
 @AllArgsConstructor
@@ -35,7 +36,7 @@ public class PlaceController {
     private static final Logger logger = LogManager.getLogger(PlaceController.class);
 
     @GetMapping("/v1/place/{searchWord}")
-    public ResponseEntity<HashMap<String, Object>> v1Place(@PathVariable String searchWord, Authentication authentication) throws Exception {
+    public Callable<HashMap<String, Object>> v1Place(@PathVariable String searchWord, Authentication authentication) throws Exception {
 
         Member userInfo = (Member)authentication.getPrincipal();
 
@@ -81,7 +82,10 @@ public class PlaceController {
             logger.debug("result from cache : "+kakaoNaverPlace);
         }
 
-        return ResponseEntity.ok(kakaoNaverPlace);
+        return () -> {
+            return kakaoNaverPlace;
+        };
+
     }
 
 
