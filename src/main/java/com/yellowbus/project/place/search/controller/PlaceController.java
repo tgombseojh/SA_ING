@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,10 +37,9 @@ public class PlaceController {
     private static final Logger logger = LogManager.getLogger(PlaceController.class);
 
     @GetMapping("/v1/place/{searchWord}")
-    public Callable<HashMap<String, Object>> v1Place(@PathVariable String searchWord, Authentication authentication) throws Exception {
+    public ResponseEntity<HashMap<String, Object>> v1Place(@PathVariable String searchWord, Authentication authentication) throws Exception {
 
         Member userInfo = (Member)authentication.getPrincipal();
-
         logger.debug(" ========= place ========= ");
         logger.debug("  "+userInfo.getUsername());
 
@@ -55,6 +55,7 @@ public class PlaceController {
         Optional<SearchResult> cache = placeService.findToCache(searchWord);
         HashMap<String, Object> kakaoNaverPlace;
         if (cache.isEmpty()) {
+            logger.debug(" ========= cache empty ========= ");
             // Async Job3
             CompletableFuture<List<String>> task1 = placeService.kakaoPlaceAPI(searchWord);
             try {
@@ -76,11 +77,27 @@ public class PlaceController {
 
             // caching
             placeService.saveSearchResult(searchWord, gson.toJson(kakaoNaverPlace));
+
         } else {
             Type type = new TypeToken<HashMap<String, Object>>(){}.getType();
             kakaoNaverPlace = gson.fromJson(cache.get().getResult(), type);
             logger.debug("result from cache : "+kakaoNaverPlace);
         }
+
+        return ResponseEntity.ok(kakaoNaverPlace);
+
+    }
+
+    @GetMapping("/v2/place/{searchWord}")
+    public Callable<HashMap<String, Object>> v2Place(@PathVariable String searchWord, Authentication authentication) throws Exception {
+
+        Member userInfo = (Member)authentication.getPrincipal();
+        logger.debug(" ========= PlaceController v2Place ========= ");
+        logger.debug("  "+Thread.currentThread().getThreadGroup().getName());
+        logger.debug("  "+Thread.currentThread().getName());
+        logger.debug("  "+userInfo.getUsername());
+
+        HashMap<String, Object> kakaoNaverPlace = placeService.v2Place(searchWord, userInfo);
 
         return () -> {
             return kakaoNaverPlace;

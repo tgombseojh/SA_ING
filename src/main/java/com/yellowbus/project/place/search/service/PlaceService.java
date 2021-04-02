@@ -3,30 +3,40 @@ package com.yellowbus.project.place.search.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.yellowbus.project.place.search.component.PlaceComponent;
 import com.yellowbus.project.place.search.entity.*;
+import com.yellowbus.project.place.search.exception.KakaoAPIException;
+import com.yellowbus.project.place.search.exception.NaverAPIException;
 import com.yellowbus.project.place.search.repository.HotKeyWordRepository;
 import com.yellowbus.project.place.search.repository.SearchHistoryRepository;
 import com.yellowbus.project.place.search.repository.SearchResultRepository;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @AllArgsConstructor
 @Service
 public class PlaceService {
 
+    PlaceComponent placeComponent;
     HotKeyWordRepository hotKeyWordRepository;
     SearchHistoryRepository searchHistoryRepository;
     SearchResultRepository searchResultRepository;
+
+    Gson gson;
 
     private static final Logger logger = LogManager.getLogger(PlaceService.class);
 
@@ -35,6 +45,53 @@ public class PlaceService {
     final String naverUri = "https://openapi.naver.com/v1/search/local.json";
     final String naverClientId = "4v8zp9lfz1ti3guCS8XC";
     final String naverClientSecret = "5GSV4Q3Rk8";
+
+    public HashMap<String, Object> v2Place(String searchWord, Member userInfo) throws Exception {
+        logger.debug(" ========= PlaceService v2Place ========= ");
+        logger.debug("  "+Thread.currentThread().getThreadGroup().getName());
+        logger.debug("  "+Thread.currentThread().getName());
+
+        // Async Job1 // 누가 언제 무엇을 검색했는지를 기록
+        placeComponent.saveSearchHistory(searchWord, userInfo);
+
+        // Async Job2 // 인기검색어 10개를 제공하기 위해서 검색할때마다 카운트 증가
+        placeComponent.saveHotKeyWord(searchWord);
+
+        // redis cache 를 도입하자.. 장소는 실시간으로 바뀌는 성격의 데이터가 아니므로, 캐시 유효시간은 1시간으로 설정하자..
+        // 검색어가 cache 에 있으면 API를 호출하지 않는다..
+        // 없으면, 호출하고 나서 그 결과를 cache 에 넣는다.
+        Optional<SearchResult> cache = placeComponent.findToCache(searchWord);
+        HashMap<String, Object> kakaoNaverPlace;
+        if (cache.isEmpty()) {
+            // Async Job3
+            CompletableFuture<List<String>> task1 = placeComponent.kakaoPlaceAPI(searchWord);
+            try {
+                task1.join();
+            } catch (Exception e) {
+                throw new KakaoAPIException(e.getMessage());
+            }
+
+            // Async Job4
+            CompletableFuture<List<String>> task2 = placeComponent.naverPlaceAPI(searchWord);
+            try {
+                task2.join();
+            } catch (Exception e) {
+                throw new NaverAPIException(e.getMessage());
+            }
+
+            // Async Job3 & 4 가 완료되면 정렬 및 합치기
+            kakaoNaverPlace = task1.thenCombine(task2, (kakao, naver) -> placeComponent.combineKakaoAndNaver(kakao, naver)).get();
+
+            // caching
+            placeComponent.saveSearchResult(searchWord, gson.toJson(kakaoNaverPlace));
+        } else {
+            Type type = new TypeToken<HashMap<String, Object>>(){}.getType();
+            kakaoNaverPlace = gson.fromJson(cache.get().getResult(), type);
+            logger.debug("result from cache : "+kakaoNaverPlace);
+        }
+
+        return kakaoNaverPlace;
+    }
 
     @Async
     public void saveSearchHistory(String searchWord, Member userInfo) {
@@ -80,13 +137,12 @@ public class PlaceService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         httpHeaders.set("Authorization", kakaoApiKey);
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, getHttpEntity(httpHeaders), String.class);
-
-        Gson gson = new Gson();
-
+        logger.info(" 000000000000000 ");
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        logger.info(" 111111111111111 ");
         JsonObject jo = gson.fromJson(responseEntity.getBody(), JsonObject.class);
-
+        logger.info(" 222222222222222 ");
         JsonArray jsonElements = jo.getAsJsonArray("documents");
         List<String> kakaoPlaceList = new ArrayList<>();
         for (int i=0; i<jsonElements.size(); i++) {
@@ -110,7 +166,6 @@ public class PlaceService {
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, getHttpEntity(httpHeaders), String.class);
 
-        Gson gson = new Gson();
         JsonObject jo = gson.fromJson(responseEntity.getBody(), JsonObject.class);
 
         JsonArray jsonElements = jo.getAsJsonArray("items");
