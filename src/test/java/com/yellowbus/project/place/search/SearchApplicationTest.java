@@ -111,7 +111,7 @@ class SearchApplicationTest {
 
         callable.call();
     }
-
+/*
     @Test @Order(4)
     public void test3() throws Exception {
         mockMvc.perform(
@@ -128,7 +128,7 @@ class SearchApplicationTest {
                         .characterEncoding("UTF-8")
                         .with( user(member) )
         ).andExpect(status().isOk());
-    }
+    }*/
 
 
 
