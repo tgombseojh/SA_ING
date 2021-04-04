@@ -33,10 +33,6 @@ public class PlaceController {
 
         Member userInfo = (Member)authentication.getPrincipal();
 
-        log.debug(" ========= PlaceController ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName()+"  "+Thread.currentThread().getName());
-        log.debug("  "+userInfo.getName());
-
         return CompletableFuture.supplyAsync(() -> {
             try {
                 return new ResponseEntity<>(placeService.v1Place(searchWord, userInfo), HttpStatus.OK);
@@ -52,20 +48,11 @@ public class PlaceController {
     @GetMapping("/v1/search/history")
     public CompletableFuture<HashMap<String, Object>> history(Authentication authentication) {
         Member userInfo = (Member)authentication.getPrincipal();
-        log.debug(" ========= PlaceController history ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName());
-        log.debug("  "+Thread.currentThread().getName());
-        log.debug("  "+userInfo.getUsername());
-
         return CompletableFuture.supplyAsync(() -> placeService.getSearchHistory(userInfo), taskExecutor);
     }
 
     @GetMapping("/v1/search/hot10keywords")
     public CompletableFuture<HashMap<String, Object>> hotKeyWord() {
-        log.debug(" ========= PlaceController hotKeyWord ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName());
-        log.debug("  "+Thread.currentThread().getName());
-
         return CompletableFuture.supplyAsync(() -> placeService.getHotKeyWord(), taskExecutor);
     }
 

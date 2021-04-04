@@ -56,7 +56,7 @@ class PlaceControllerTest {
         member.setName("seojh");
 
         // redis cache 초기화
-        searchResultRepository.deleteAll();
+        // searchResultRepository.deleteAll();
     }
 
     // PlaceComponent 38번 라인 활성화 후 테스트

@@ -15,8 +15,6 @@ import com.yellowbus.project.place.search.repository.SearchResultRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -38,17 +36,11 @@ public class PlaceService {
     Gson gson;
 
     public HashMap<String, Object> v1Place(String searchWord, Member userInfo) throws ExecutionException, InterruptedException {
-        log.info(" === 11111111111111111111 === ");
-
         // Async Job1 // 누가 언제 무엇을 검색했는지를 기록
         placeComponent.saveSearchHistory(searchWord, userInfo);
 
-        log.info(" === 22222222222222222222 === ");
-
         // Async Job2 // 인기검색어 10개를 제공하기 위해서 검색할때마다 카운트 증가
         placeComponent.saveHotKeyWord(searchWord);
-
-        log.info(" === 33333333333333333333 === ");
 
         // redis cache 를 도입하자.. 장소는 실시간으로 바뀌는 성격의 데이터가 아니므로, 캐시 유효시간은 1시간으로 설정하자..
         // 검색어가 cache 에 있으면 API를 호출하지 않는다..
@@ -57,8 +49,6 @@ public class PlaceService {
         Optional<SearchResult> cache = placeComponent.findToCache(searchWord);
         HashMap<String, Object> kakaoNaverPlace;
         if (cache.isEmpty()) {
-            log.info(" === cache empty === ");
-
             CompletableFuture<List<String>> task1 = placeComponent.kakaoPlaceAPI(searchWord);
             try {
                 task1.join();
@@ -78,33 +68,23 @@ public class PlaceService {
 
             // caching
             placeComponent.saveSearchResult(searchWord, gson.toJson(kakaoNaverPlace));
+
         } else {
             Type type = new TypeToken<HashMap<String, Object>>(){}.getType();
             kakaoNaverPlace = gson.fromJson(cache.get().getResult(), type);
             log.debug("result from cache : "+kakaoNaverPlace);
         }
 
-        log.info(" === 44444444444444444444 === ");
-
         return kakaoNaverPlace;
     }
 
     public HashMap<String, Object> getSearchHistory(Member userInfo) {
-        log.debug(" ========= PlaceService getSearchHistory ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName());
-        log.debug("  "+Thread.currentThread().getName());
-
         List<SearchHistory> searchHistoryList = searchHistoryRepository.findTop20ByUserIdOrderByDateDesc(userInfo.getUserId());
-        log.debug(" ========= searchHistoryList : "+searchHistoryList);
 
         return new SearchHistory().changeDateFormat(searchHistoryList);
     }
 
     public HashMap<String, Object> getHotKeyWord() {
-        log.debug(" ========= PlaceService getHotKeyWord ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName());
-        log.debug("  "+Thread.currentThread().getName());
-
         List<HotKeyWord> hotKeyWordList = hotKeyWordRepository.findTop10ByOrderBySearchCountDesc();
 
         return new HotKeyWord().changeFromat(hotKeyWordList);

@@ -1,7 +1,7 @@
 package com.yellowbus.project.place.search;
 
+import com.yellowbus.project.place.search.component.QueueConsumer;
 import com.yellowbus.project.place.search.entity.Member;
-import com.yellowbus.project.place.search.repository.MemberRepository;
 import com.yellowbus.project.place.search.repository.SearchResultRepository;
 import com.yellowbus.project.place.search.service.PlaceService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,10 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -49,6 +47,9 @@ class SearchApplicationTest {
 
     Member member;
 
+    @Autowired
+    QueueConsumer queueConsumer;
+
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(ctx).apply(springSecurity())
@@ -62,25 +63,35 @@ class SearchApplicationTest {
         member.setName("seojh");
 
         // redis cache 초기화
-        searchResultRepository.deleteAll();
+        // searchResultRepository.deleteAll();
+
+        // queue 활성
+        new Thread(queueConsumer).start();
     }
 
-    // 전체 테스트 시나리오 (성능측정- Springboot embedded Tomcat 의 기본 max-threads 는 200)
-    // 사용자 2000명 생성과 회원가입, 로그인을 했다고 전제로 하고 진행.
-    // 동시 접속자 2천명이 각각 10번씩 다양한 키워드로 조회하고 난 후
-    // 자신의 검색기록을 조회
-    String[] places = new String[]{"김밥", "국수", "홍게", "국밥", "짜장면", "짬뽕", "피자", "돈가스", "아구찜", "낙지"};
-    ArrayList<Member> members = new ArrayList<>();
+    /*
+    전체 테스트 시나리오 (성능측정- Springboot embedded Tomcat 의 기본 max-threads 는 200)
+    사용자 2000명 생성과 회원가입, 로그인을 했다고 전제로 하고 진행.
+    동시 접속자 2천명이 각각 10번씩 다양한 키워드로 조회하고 난 후
+    자신의 검색기록을 조회
 
-    // CompletableFuture call
+    하려고 했으나, 네이버 API 호출에 시간제약이 있어서, 너무 빠른 호출을 시험할 수가 없다.
+
+    100 명의 동시 사용자가 10개의 키워드를 랜덤으로 동시에 요청하고
+
+    인기 검색어의 총합이 100 이면 통과
+    */
+    String[] places = new String[]{"김밥", "국수", "홍게", "국밥", "짜장면", "짬뽕", "피자", "돈가스", "아구찜", "낙지"};
+
     @Test @Order(1)
-    public void test1() throws Exception {
+    public void test1() {
+
         ArrayList<CompletableFuture> completableFutureArrayList = new ArrayList<>();
         Random random = new Random();
         int idx = 0;
-        int size = 4;
+        int size = 100;
         for (int i=1; i<=size; i++) {
-            idx = random.nextInt(3);
+            idx = random.nextInt(10);
             int finalIdx = idx;
             CompletableFuture completableFuture = CompletableFuture.supplyAsync(() -> {
                 try {

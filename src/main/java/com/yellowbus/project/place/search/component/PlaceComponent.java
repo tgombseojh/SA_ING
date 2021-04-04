@@ -3,7 +3,6 @@ package com.yellowbus.project.place.search.component;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.yellowbus.project.place.search.entity.HotKeyWord;
 import com.yellowbus.project.place.search.entity.Member;
 import com.yellowbus.project.place.search.entity.SearchHistory;
 import com.yellowbus.project.place.search.entity.SearchResult;
@@ -17,13 +16,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -34,6 +30,7 @@ public class PlaceComponent {
     SearchResultRepository searchResultRepository;
     SearchHistoryRepository searchHistoryRepository;
     HotKeyWordRepository hotKeyWordRepository;
+    BlockingDeque<String> blockingDeque;
 
     private static final Logger logger = LogManager.getLogger(PlaceComponent.class);
 
@@ -56,29 +53,11 @@ public class PlaceComponent {
         searchHistory.setDate(new Date());
 
         searchHistoryRepository.save(searchHistory);
-
-        log.debug(" ========= PlaceComponent saveSearchHistory ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName()+"  "+Thread.currentThread().getName());
     }
 
     @Async("threadPoolTakExecutor")
-    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
-    public void saveHotKeyWord(String searchWord) {
-        Optional<HotKeyWord> hotKeyWord = hotKeyWordRepository.findOneByKeyWord(searchWord);
-        // 존재하는 키워드라면 횟수 증가 후 업뎃
-        HotKeyWord hotKeyWordNew = new HotKeyWord();
-        if (hotKeyWord.isEmpty()) {
-            hotKeyWordNew.setKeyWord(searchWord);
-            hotKeyWordNew.setSearchCount(1L);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-            hotKeyWordNew.setDate(simpleDateFormat.format(new Date()));
-        } else {    // 존재하지 않으면 인서트
-            hotKeyWordNew.setSearchCount(hotKeyWord.get().getSearchCount() + 1);
-        }
-        hotKeyWordRepository.save(hotKeyWordNew);
-
-        log.debug(" ========= PlaceComponent saveHotKeyWord ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName()+"  "+Thread.currentThread().getName());
+    public void saveHotKeyWord(String searchWord) throws InterruptedException {
+        blockingDeque.put(searchWord);
     }
 
     public Optional<SearchResult> findToCache(String searchWord) {

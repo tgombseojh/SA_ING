@@ -7,6 +7,9 @@ import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
+
 @EnableAsync
 @Configuration
 public class AsyncConfig extends AsyncConfigurerSupport {
@@ -25,5 +28,9 @@ public class AsyncConfig extends AsyncConfigurerSupport {
         return taskExecutor;
     }
 
+    @Bean
+    public BlockingDeque<String> blockingDeque() {
+        return new LinkedBlockingDeque<>();
+    }
 
 }
