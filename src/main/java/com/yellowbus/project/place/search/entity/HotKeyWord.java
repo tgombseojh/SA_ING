@@ -20,10 +20,10 @@ import java.util.List;
 public class HotKeyWord {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "keyWord")
+    @Column(name = "keyWord", unique = true)
     @NonNull
     private String keyWord;
 
@@ -31,7 +31,7 @@ public class HotKeyWord {
     @NonNull
     private Long searchCount;
 
-    @Column(name = "date")
+    @Column(name = "searchDate")
     @NonNull
     private String date;
 

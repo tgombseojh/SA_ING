@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class MemberService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     MemberRepository memberRepository;
 

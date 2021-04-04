@@ -15,14 +15,15 @@ public class AsyncConfig extends AsyncConfigurerSupport {
     public AsyncTaskExecutor threadPoolTakExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         taskExecutor.setCorePoolSize(5);
-        taskExecutor.setMaxPoolSize(100);
+        taskExecutor.setMaxPoolSize(200);
         // max thread 가 동작할 때 대기할 수 있는 큐 사이즈
         // thread 와 queue 가 꽉차면 Exception 발생
-        taskExecutor.setQueueCapacity(100);
+        taskExecutor.setQueueCapacity(2000);
         taskExecutor.setThreadNamePrefix("Concurrent Executor-");
         taskExecutor.initialize();
 
         return taskExecutor;
     }
+
 
 }

@@ -30,15 +30,16 @@ public class PlaceController {
 
     @GetMapping("/v1/place/{searchWord}")
     public CompletableFuture<ResponseEntity<HashMap<String, Object>>> v3Place(@PathVariable String searchWord, Authentication authentication) {
+
         Member userInfo = (Member)authentication.getPrincipal();
-        log.debug(" ========= PlaceController v3Place ========= ");
-        log.debug("  "+Thread.currentThread().getThreadGroup().getName());
-        log.debug("  "+Thread.currentThread().getName());
-        log.debug("  "+userInfo.getUsername());
+
+        log.debug(" ========= PlaceController ========= ");
+        log.debug("  "+Thread.currentThread().getThreadGroup().getName()+"  "+Thread.currentThread().getName());
+        log.debug("  "+userInfo.getName());
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                return new ResponseEntity<>(placeService.v3Place(searchWord, userInfo), HttpStatus.OK);
+                return new ResponseEntity<>(placeService.v1Place(searchWord, userInfo), HttpStatus.OK);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -60,12 +61,10 @@ public class PlaceController {
     }
 
     @GetMapping("/v1/search/hot10keywords")
-    public CompletableFuture<HashMap<String, Object>> hotKeyWord(Authentication authentication) {
-        Member userInfo = (Member)authentication.getPrincipal();
+    public CompletableFuture<HashMap<String, Object>> hotKeyWord() {
         log.debug(" ========= PlaceController hotKeyWord ========= ");
         log.debug("  "+Thread.currentThread().getThreadGroup().getName());
         log.debug("  "+Thread.currentThread().getName());
-        log.debug("  "+userInfo.getUsername());
 
         return CompletableFuture.supplyAsync(() -> placeService.getHotKeyWord(), taskExecutor);
     }

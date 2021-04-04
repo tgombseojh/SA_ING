@@ -11,11 +11,14 @@ import com.yellowbus.project.place.search.repository.HotKeyWordRepository;
 import com.yellowbus.project.place.search.repository.SearchHistoryRepository;
 import com.yellowbus.project.place.search.repository.SearchResultRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class PlaceComponent {
 
     SearchResultRepository searchResultRepository;
@@ -34,50 +38,47 @@ public class PlaceComponent {
     private static final Logger logger = LogManager.getLogger(PlaceComponent.class);
 
     final String kakaoApiKey = "KakaoAK a1ff1dac0d12a6bfe4d672cd00c1894b";
-    final String kakaoUri = "https://api.kakao.com/v2/local/search/keyword.json";
-    //final String kakaoUri = "https://dapi.kakao.com/v2/local/search/keyword.json";
+
+    // open api 에러를 일으키는 잘못된 uri
+    //final String kakaoUri = "https://api.kakao.com/v2/local/search/keyword.json";
+
+    final String kakaoUri = "https://dapi.kakao.com/v2/local/search/keyword.json";
     final String naverUri = "https://openapi.naver.com/v1/search/local.json";
     final String naverClientId = "4v8zp9lfz1ti3guCS8XC";
     final String naverClientSecret = "5GSV4Q3Rk8";
 
     @Async("threadPoolTakExecutor")
-    public CompletableFuture<SearchHistory> saveSearchHistory(String searchWord, Member userInfo) {
-        logger.debug(" ========= PlaceComponent saveSearchHistory ========= ");
-        logger.debug("  "+Thread.currentThread().getThreadGroup().getName());
-        logger.debug("  "+Thread.currentThread().getName());
-
+    public void saveSearchHistory(String searchWord, Member userInfo) {
         SearchHistory searchHistory = new SearchHistory();
         searchHistory.setUserId(userInfo.getUserId());
         searchHistory.setUserName(userInfo.getUsername());
         searchHistory.setKeyWord(searchWord);
         searchHistory.setDate(new Date());
 
-        searchHistory = searchHistoryRepository.save(searchHistory);
+        searchHistoryRepository.save(searchHistory);
 
-        return CompletableFuture.completedFuture(searchHistory);
+        log.debug(" ========= PlaceComponent saveSearchHistory ========= ");
+        log.debug("  "+Thread.currentThread().getThreadGroup().getName()+"  "+Thread.currentThread().getName());
     }
 
     @Async("threadPoolTakExecutor")
-    @Transactional
-    public CompletableFuture<HotKeyWord> saveHotKeyWord(String searchWord) {
-        logger.debug(" ========= PlaceComponent saveHotKeyWord ========= ");
-        logger.debug("  "+Thread.currentThread().getThreadGroup().getName());
-        logger.debug("  "+Thread.currentThread().getName());
-
-        HotKeyWord hotKeyWord = hotKeyWordRepository.findByKeyWord(searchWord);
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+    public void saveHotKeyWord(String searchWord) {
+        Optional<HotKeyWord> hotKeyWord = hotKeyWordRepository.findOneByKeyWord(searchWord);
         // 존재하는 키워드라면 횟수 증가 후 업뎃
-        if (hotKeyWord!=null) {
-            hotKeyWord.setSearchCount(hotKeyWord.getSearchCount()+1);
-        } else {    // 존재하지 않으면 인서트
-            hotKeyWord = new HotKeyWord();
-            hotKeyWord.setKeyWord(searchWord);
-            hotKeyWord.setSearchCount(1L);
+        HotKeyWord hotKeyWordNew = new HotKeyWord();
+        if (hotKeyWord.isEmpty()) {
+            hotKeyWordNew.setKeyWord(searchWord);
+            hotKeyWordNew.setSearchCount(1L);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-            hotKeyWord.setDate(simpleDateFormat.format(new Date()));
+            hotKeyWordNew.setDate(simpleDateFormat.format(new Date()));
+        } else {    // 존재하지 않으면 인서트
+            hotKeyWordNew.setSearchCount(hotKeyWord.get().getSearchCount() + 1);
         }
-        hotKeyWord = hotKeyWordRepository.save(hotKeyWord);
+        hotKeyWordRepository.save(hotKeyWordNew);
 
-        return CompletableFuture.completedFuture(hotKeyWord);
+        log.debug(" ========= PlaceComponent saveHotKeyWord ========= ");
+        log.debug("  "+Thread.currentThread().getThreadGroup().getName()+"  "+Thread.currentThread().getName());
     }
 
     public Optional<SearchResult> findToCache(String searchWord) {

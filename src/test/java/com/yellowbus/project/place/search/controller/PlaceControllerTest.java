@@ -3,7 +3,6 @@ package com.yellowbus.project.place.search.controller;
 import com.yellowbus.project.place.search.entity.Member;
 import com.yellowbus.project.place.search.repository.MemberRepository;
 import com.yellowbus.project.place.search.repository.SearchResultRepository;
-import com.yellowbus.project.place.search.service.MemberService;
 import com.yellowbus.project.place.search.service.PlaceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -34,9 +33,6 @@ class PlaceControllerTest {
     MemberRepository memberRepository;
 
     @Autowired
-    MemberService memberService;
-
-    @Autowired
     PlaceService placeService;
 
     @Autowired
@@ -59,10 +55,11 @@ class PlaceControllerTest {
         member.setPassword("tiger");
         member.setName("seojh");
 
-        // redis cache delete
+        // redis cache 초기화
         searchResultRepository.deleteAll();
     }
 
+    // PlaceComponent 38번 라인 활성화 후 테스트
     @Test @Order(1)
     public void test1() throws Exception {
         MvcResult mvcResult = mockMvc.perform(
@@ -71,10 +68,10 @@ class PlaceControllerTest {
                         .with( user(member) )
         ).andReturn();
 
-        mockMvc.perform(asyncDispatch(mvcResult)).andDo(print()).andExpect(status().is(500));
+        mockMvc.perform(asyncDispatch(mvcResult)).andDo(print()).andExpect(status().is(200));
     }
 
-    /*@Test @Order(2)
+    @Test @Order(2)
     public void test2() throws Exception {
         MvcResult mvcResult = mockMvc.perform(
                 get("/v1/search/history")
@@ -94,6 +91,6 @@ class PlaceControllerTest {
         ).andReturn();
 
         mockMvc.perform(asyncDispatch(mvcResult)).andExpect(status().isOk());
-    }*/
+    }
 
 }

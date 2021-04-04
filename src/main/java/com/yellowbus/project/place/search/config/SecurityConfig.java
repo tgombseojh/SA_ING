@@ -2,7 +2,7 @@ package com.yellowbus.project.place.search.config;
 
 import com.yellowbus.project.place.search.handler.LoginFailureHandler;
 import com.yellowbus.project.place.search.handler.LoginSuccessHandler;
-import com.yellowbus.project.place.search.service.MemberService;
+import com.yellowbus.project.place.search.service.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    MemberService memberService;
+    UserDetailsServiceImpl userDetailsService;
 
     @Override
     public void configure(WebSecurity web) {
@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(memberService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
 
